@@ -1,0 +1,30 @@
+name: Staging Deployment
+
+on:
+  push:
+    branches:
+      - testing
+
+jobs:
+  staging:
+    name: Deploy to Staging Environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Merge into Staging Branch
+        run: |
+          git fetch origin
+          git checkout staging
+          git merge --no-ff testing -m "Auto-merge from testing after successful validation"
+          git push origin staging
+
+      - name: Deploy Backend to Staging (Railway)
+        run: |
+          railway up --environment staging
+
+      - name: Deploy Frontend to Staging (Vercel)
+        run: |
+          vercel --env staging

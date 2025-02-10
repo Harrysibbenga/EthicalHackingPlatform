@@ -1,0 +1,23 @@
+name: Production Deployment
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  production:
+    name: Deploy to Production Environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Deploy Backend to Production (Railway)
+        run: |
+          railway up --environment production
+
+      - name: Deploy Frontend to Production (Vercel)
+        run: |
+          vercel --prod

@@ -61,7 +61,9 @@ ethical-hacking-platform/
 │   ├── ci-cd/             # GitHub Actions workflows
 │   ├── terraform/         # Infrastructure automation
 │   ├── railway/           # Railway deployment files
-│   └── fly.toml           # Fly.io deployment config
+│   ├── fly.toml           # Fly.io deployment config
+│   ├── staging/           # Staging environment configuration
+│   └── production/        # Production environment configuration
 │
 │── .github/               # GitHub Actions (CI/CD)
 │── .gitignore             # Ignore unnecessary files
@@ -74,6 +76,11 @@ ethical-hacking-platform/
 - **`testing`**: Runs unit tests before merging.
 - **`staging`**: Pre-production environment.
 - **`production`**: Stable live version.
+
+## Staging & Production Environments
+
+- **Staging Environment:** Used for final testing before deploying to production. Includes separate API keys, database instances, and feature toggles.
+- **Production Environment:** The live version used by end-users, ensuring stability and security.
 
 ## Setup Instructions
 
@@ -104,15 +111,31 @@ npm run dev
 
 ### 4. Deploy Backend
 
+#### Staging
+
 ```bash
-railway init
-railway up
+railway init --environment staging
+railway up --service backend-staging
+```
+
+#### Production
+
+```bash
+railway init --environment production
+railway up --service backend-production
 ```
 
 ### 5. Deploy Frontend
 
+#### Staging
+
 ```bash
-vercel login
+vercel --env staging
+```
+
+#### Production
+
+```bash
 vercel --prod
 ```
 
