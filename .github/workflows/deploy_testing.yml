@@ -12,7 +12,7 @@ jobs:
 
     env:
       LOGS_DIR: logs
-      FIREBASE_CREDENTIALS_PATH: "./firebase.json"
+      FIREBASE_CREDENTIALS_PATH: "/home/runner/work/EthicalHackingPlatform/EthicalHackingPlatform/firebase.json"
       VALID_API_KEYS: ${{ secrets.VALID_API_KEYS }}
 
       # Email Credentials
