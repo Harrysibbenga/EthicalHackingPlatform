@@ -47,12 +47,6 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Create Firebase Credentials File
-        run: echo "$FIREBASE_CREDENTIALS" > $FIREBASE_CREDENTIALS_PATH
-
-      - name: Verify Firebase File Exists
-        run: cat $FIREBASE_CREDENTIALS_PATH
-
       - name: Create logs directory
         run: mkdir -p logs
 
