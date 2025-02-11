@@ -18,8 +18,8 @@ FIREBASE_CREDENTIALS_PATH = os.getenv("FIREBASE_CREDENTIALS_PATH")
 if not os.path.exists(FIREBASE_CREDENTIALS_PATH):
     raise RuntimeError(f"Firebase credentials file not found: {FIREBASE_CREDENTIALS_PATH}")
 
-FIREBASE_CREDENTIALS = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
-firebase_admin.initialize_app(FIREBASE_CREDENTIALS)
+FIREBASE_CREDS = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
+firebase_admin.initialize_app(FIREBASE_CREDS)
 
 security = HTTPBearer()
 
