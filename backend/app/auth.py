@@ -10,17 +10,16 @@ from fastapi.security import HTTPBearer
 from app.services.alerts import send_alert_email, send_discord_alert
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
-# Load Firebase credentials securely
-FIREBASE_CREDENTIALS = os.getenv("FIREBASE_CREDENTIALS")
-FIREBASE_CREDENTIALS_PATH = os.path.join(FIREBASE_CREDENTIALS, "firebase.json")
+FIREBASE_CREDENTIALS_PATH = os.getenv("FIREBASE_CREDENTIALS_PATH")
 
 if not os.path.exists(FIREBASE_CREDENTIALS_PATH):
     raise RuntimeError(f"Firebase credentials file not found: {FIREBASE_CREDENTIALS_PATH}")
 
-cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
-firebase_admin.initialize_app(cred)
+FIREBASE_CREDENTIALS = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
+firebase_admin.initialize_app(FIREBASE_CREDENTIALS)
 
 security = HTTPBearer()
 
