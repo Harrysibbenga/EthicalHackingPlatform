@@ -12,7 +12,6 @@ jobs:
 
     env:
       LOGS_DIR: logs
-      FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
       FIREBASE_CREDENTIALS_PATH: "./firebase.json"
       VALID_API_KEYS: ${{ secrets.VALID_API_KEYS }}
 
@@ -29,6 +28,19 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Create Firebase Credentials File
+        run: echo "$FIREBASE_CREDENTIALS" > $FIREBASE_CREDENTIALS_PATH
+        env:
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+
+      - name: Verify Firebase Credentials File Exists
+        run: |
+          if [ -f "$FIREBASE_CREDENTIALS_PATH" ]; then
+            echo "✅ Firebase credentials file exists at: $FIREBASE_CREDENTIALS_PATH"
+          else
+            echo "❌ Firebase credentials file NOT found!" && exit 1
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v3
