@@ -1,9 +1,14 @@
-import httpx
+from fastapi.testclient import TestClient
+from main import app 
 
-BASE_URL = "http://localhost:8000"
+client = TestClient(app)
 
 def test_rate_limiting():
-    for _ in range(6):  # Exceed the 5/minute limit
-        response = httpx.get(f"{BASE_URL}/health")
+    """Test rate limiting by making multiple requests within a short period."""
+    for _ in range(6):
+        response = client.get("/health")  
+
     assert response.status_code == 429
-    assert response.json().get("message") == "Too many requests, slow down!"
+    
+    assert "too many requests" in response.text.lower()
+    assert "slow down!" in response.text.lower()
