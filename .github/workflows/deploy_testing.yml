@@ -29,10 +29,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Create Firebase Credentials File
-        run: echo "$FIREBASE_CREDENTIALS" > $FIREBASE_CREDENTIALS_PATH
-        env:
-          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+      - name: Decode and Create Firebase Credentials File
+        run: echo "${{ secrets.FIREBASE_CREDENTIALS }}" | base64 --decode > $FIREBASE_CREDENTIALS_PATH
 
       - name: Verify Firebase Credentials File Exists
         run: |
