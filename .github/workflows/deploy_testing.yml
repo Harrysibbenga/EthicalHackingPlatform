@@ -17,14 +17,14 @@ jobs:
       VALID_API_KEYS: ${{ secrets.VALID_API_KEYS }}
 
       # Email Credentials
-      SMTP_SERVER: ${{ secrets.VALID_API_KEYS }}
-      SMTP_PORT: ${{ secrets.VALID_API_KEYS }}
-      EMAIL_SENDER: ${{ secrets.VALID_API_KEYS }}
-      EMAIL_PASSWORD: ${{ secrets.VALID_API_KEYS }}
-      EMAIL_RECEIVER: ${{ secrets.VALID_API_KEYS }}
+      SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+      SMTP_PORT: ${{ secrets.SMTP_PORT }}
+      EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
 
       # Discord WebHooks
-      API_LOGS_DISCORD_WEBHOOK: ${{ secrets.VALID_API_KEYS }}
+      API_LOGS_DISCORD_WEBHOOK: ${{ secrets.API_LOGS_DISCORD_WEBHOOK }}
 
     steps:
       - name: Checkout Repository
