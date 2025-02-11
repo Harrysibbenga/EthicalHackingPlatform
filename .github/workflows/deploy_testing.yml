@@ -30,7 +30,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Decode and Create Firebase Credentials File
-        run: echo "${{ secrets.FIREBASE_CREDENTIALS }}" | base64 --decode > $FIREBASE_CREDENTIALS_PATH
+        run: |
+          echo "${{ secrets.FIREBASE_CREDENTIALS }}" | base64 --decode > $FIREBASE_CREDENTIALS_PATH
+          cat $FIREBASE_CREDENTIALS_PATH  # ✅ Print contents (REMOVE AFTER TESTING)
 
       - name: Verify Firebase Credentials File Exists
         run: |
