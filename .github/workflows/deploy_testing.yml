@@ -10,6 +10,9 @@ jobs:
     name: Run Tests on Testing Branch
     runs-on: ubuntu-latest
 
+    env:
+      LOGS_DIR: logs
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
