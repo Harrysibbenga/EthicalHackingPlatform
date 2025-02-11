@@ -13,13 +13,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load Firebase credentials securely
-cred_dir = os.getenv("FIREBASE_CREDENTIALS_PATH")
-firebase_cred_file = os.path.join(cred_dir, "ethicalhackingplatform-2090f-firebase-adminsdk-fbsvc-b9e56736c8.json")
+FIREBASE_CREDENTIALS = os.getenv("FIREBASE_CREDENTIALS")
+FIREBASE_CREDENTIALS_PATH = os.path.join(FIREBASE_CREDENTIALS, "firebase.json")
 
-if not os.path.exists(firebase_cred_file):
-    raise RuntimeError(f"Firebase credentials file not found: {firebase_cred_file}")
+if not os.path.exists(FIREBASE_CREDENTIALS_PATH):
+    raise RuntimeError(f"Firebase credentials file not found: {FIREBASE_CREDENTIALS_PATH}")
 
-cred = credentials.Certificate(firebase_cred_file)
+cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
 firebase_admin.initialize_app(cred)
 
 security = HTTPBearer()
