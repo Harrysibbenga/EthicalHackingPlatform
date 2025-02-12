@@ -77,9 +77,15 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Merge Main into Testing
+      - name: Merge Main into Testing with Conflict Resolution
         run: |
           git fetch origin
           git checkout testing || git checkout -b testing origin/testing
-          git merge --allow-unrelated-histories --no-ff main -m "Auto-merge from main after successful tests"
+          git merge --no-ff main -m "Auto-merge from main after successful tests" || true
+          
+          # Resolve conflicts by always keeping 'main' version
+          git checkout --theirs .
+          git add .
+          git commit -m "Resolved merge conflicts by keeping main's version" || true
+          
           git push origin testing
