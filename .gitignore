@@ -36,3 +36,6 @@ logs
 !.env.example
 
 firebase.json
+
+notes.txt
+

@@ -33,7 +33,7 @@ jobs:
     needs: merge-to-staging
 
     steps:
-       - name: Set Firebase Credentials in Railway
+      - name: Set Firebase Credentials in Railway
         run: |
           echo "Setting Firebase credentials in Railway..."
           railway env set FIREBASE_CREDENTIALS_BASE64="${{ secrets.FIREBASE_CREDENTIALS }}"
@@ -42,6 +42,4 @@ jobs:
         run: |
           railway up --environment staging
 
-      # - name: Deploy Frontend to Vercel (Optional)
-      #   run: |
-      #     vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }}
+
