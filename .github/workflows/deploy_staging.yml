@@ -43,6 +43,6 @@ jobs:
         uses: bervProject/railway-deploy@main
         with:
           railway_token: ${{ secrets.STAGING_RAILWAY_TOKEN }}
-          service_id: ${{ secrets.STAGING_RAILWAY_SERVICE_ID }}
+          service: ${{ secrets.STAGING_RAILWAY_SERVICE_ID }}
           environment: staging
           path: backend/
