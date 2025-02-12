@@ -43,8 +43,19 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: staging
-   
+
+      - name: Debug: Verify Railway Token
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "❌ RAILWAY_TOKEN is not set. Exiting."
+            exit 1
+          else
+            echo "✅ RAILWAY_TOKEN is set correctly."
+          fi
+
       - name: Deploy to Railway (Staging)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.STAGING_RAILWAY_TOKEN }}
         run: |
           cd backend/
           railway up --service=${{ env.SVC_ID }}
