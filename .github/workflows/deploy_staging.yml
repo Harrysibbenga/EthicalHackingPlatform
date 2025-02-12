@@ -52,4 +52,4 @@ jobs:
       - name: Deploy to Railway (Staging)
         run: |
           cd backend/
-          railway up --service="${{ secrets.STAGING_RAILWAY_SERVICE_ID }}" --token="${{ secrets.STAGING_RAILWAY_TOKEN }}"
+          railway up --service="${{ secrets.STAGING_RAILWAY_SERVICE_ID }}"
