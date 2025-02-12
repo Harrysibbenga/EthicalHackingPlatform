@@ -34,6 +34,11 @@ jobs:
     needs: merge-to-staging
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: staging
+
       - name: Install Railway CLI
         run: |
           curl -fsSL https://railway.app/install.sh | sh
