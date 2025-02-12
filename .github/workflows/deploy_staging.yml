@@ -45,4 +45,4 @@ jobs:
           railway_token: ${{ secrets.STAGING_RAILWAY_TOKEN }}
           service_id: ${{ secrets.STAGING_RAILWAY_SERVICE_ID }}
           environment: staging
-          path: backend/  # ✅ Ensures Railway looks inside `backend/` for Dockerfile
+          path: backend/
