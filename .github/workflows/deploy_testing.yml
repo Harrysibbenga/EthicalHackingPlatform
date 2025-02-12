@@ -77,22 +77,26 @@ jobs:
           rm -rf frontend/node_modules logs FIREBASE_CREDENTIALS_PATH backend/__pycache__*
           echo "Temporary files removed successfully"
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/Harrysibbenga/EthicalHackingPlatform.git
+  test:
+      name: Deploying to Testing Branch
+      runs-on: ubuntu-latest
 
+      steps:
+        - name: Configure Git
+          run: |
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/Harrysibbenga/EthicalHackingPlatform.git
 
-      - name: Merge Main into Testing with Conflict Resolution
-        run: |
-          git fetch origin
-          git checkout testing || git checkout -b testing origin/testing
-          git merge --no-ff main -m "Auto-merge from main after successful tests" || true
-          
-          # Resolve conflicts by always keeping 'main' version
-          git checkout --theirs .
-          git add .
-          git commit -m "Resolved merge conflicts by keeping main's version" || true
-          
-          git push origin testing
+        - name: Merge Main into Testing with Conflict Resolution
+          run: |
+            git fetch origin
+            git checkout testing || git checkout -b testing origin/testing
+            git merge --no-ff main -m "Auto-merge from main after successful tests" || true
+            
+            # Resolve conflicts by always keeping 'main' version
+            git checkout --theirs .
+            git add .
+            git commit -m "Resolved merge conflicts by keeping main's version" || true
+            
+            git push origin testing
