@@ -81,6 +81,8 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/Harrysibbenga/EthicalHackingPlatform.git
+
 
       - name: Merge Main into Testing with Conflict Resolution
         run: |
