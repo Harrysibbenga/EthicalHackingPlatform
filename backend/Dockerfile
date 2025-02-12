@@ -10,6 +10,12 @@ COPY . .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Create logs directory
+RUN mkdir -p /app/logs
+
+# Set up environment variable (optional)
+ENV LOGS_DIR=/app/logs
+
 # Set environment variables from Railway
 ARG DATABASE_URL
 ARG DISCORD_WEBHOOK_URL
