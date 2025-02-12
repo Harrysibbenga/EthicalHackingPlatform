@@ -35,4 +35,4 @@ logs
 .env.*
 !.env.example
 
-firebase.jsonfirebase.json
+firebase.json

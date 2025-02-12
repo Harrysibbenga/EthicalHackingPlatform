@@ -1,7 +1,8 @@
 import os
 from app.services.logging import security_logger
 from typing import Dict
-
+import json
+import base64
 import firebase_admin
 from firebase_admin import auth, credentials
 from fastapi import HTTPException, Security, Header
@@ -13,13 +14,35 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-FIREBASE_CREDENTIALS_PATH = os.getenv("FIREBASE_CREDENTIALS_PATH")
+firebase_creds = None
 
-if not os.path.exists(FIREBASE_CREDENTIALS_PATH):
-    raise RuntimeError(f"Firebase credentials file not found: {FIREBASE_CREDENTIALS_PATH}")
+# ✅ Load from Base64 environment variable
+firebase_creds_base64 = os.getenv("FIREBASE_CREDENTIALS_BASE64")
+if firebase_creds_base64:
+    print("🔥 Loading Firebase credentials from environment variable...")
+    try:
+        firebase_creds_json = base64.b64decode(firebase_creds_base64).decode("utf-8")
+        firebase_creds = json.loads(firebase_creds_json)
+    except Exception as e:
+        raise ValueError(f"❌ Failed to decode Firebase credentials: {e}")
 
-FIREBASE_CREDS = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
-firebase_admin.initialize_app(FIREBASE_CREDS)
+# ✅ If file exists, load from there (for local development)
+elif os.path.exists("/app/firebase.json"):
+    print("📂 Loading Firebase credentials from /app/firebase.json...")
+    with open("/app/firebase.json", "r") as f:
+        firebase_creds = json.load(f)
+
+# ❌ Raise an error if credentials are missing
+if not firebase_creds:
+    raise ValueError("❌ Firebase credentials not found! Set FIREBASE_CREDENTIALS_BASE64 or provide /app/firebase.json")
+
+# 🔥 Initialize Firebase
+try:
+    cred = credentials.Certificate(firebase_creds)
+    firebase_admin.initialize_app(cred)
+    print("✅ Firebase successfully initialized!")
+except Exception as e:
+    raise ValueError(f"❌ Failed to initialize Firebase: {e}")
 
 security = HTTPBearer()
 
