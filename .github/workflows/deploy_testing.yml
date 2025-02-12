@@ -64,7 +64,7 @@ jobs:
 
       - name: Install Frontend Dependencies
         run: |
-          cd frontend/ethical-hacking-frontend
+          cd frontend
           npm install
 
       - name: Run Frontend Tests
