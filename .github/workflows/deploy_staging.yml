@@ -20,7 +20,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/Harrysibbenga/EthicalHackingPlatform.git
 
-      - name: Merge Main into Staging
+      - name: Merge Testing into Staging
         run: |
           git fetch origin
           git checkout staging || git checkout -b staging origin/staging
@@ -49,5 +49,3 @@ jobs:
       - name: Deploy to Railway (Staging)
         run: |
           railway up --environment staging
-
-
