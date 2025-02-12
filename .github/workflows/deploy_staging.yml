@@ -34,10 +34,6 @@ jobs:
     container: ghcr.io/railwayapp/cli:latest
     needs: merge-to-staging
 
-    env:
-      SVC_ID: ${{ secrets.STAGING_RAILWAY_SERVICE_ID }}
-      RAILWAY_TOKEN: ${{ secrets.STAGING_RAILWAY_TOKEN }}
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -46,7 +42,7 @@ jobs:
 
       - name: Debug: Verify Railway Token
         run: |
-          if [ -z "$RAILWAY_TOKEN" ]; then
+          if [ -z "${{ secrets.STAGING_RAILWAY_TOKEN }}" ]; then
             echo "❌ RAILWAY_TOKEN is not set. Exiting."
             exit 1
           else
@@ -56,6 +52,8 @@ jobs:
       - name: Deploy to Railway (Staging)
         env:
           RAILWAY_TOKEN: ${{ secrets.STAGING_RAILWAY_TOKEN }}
+          SVC_ID: ${{ secrets.STAGING_RAILWAY_SERVICE_ID }}
         run: |
           cd backend/
-          railway up --service=${{ env.SVC_ID }}
+          export RAILWAY_TOKEN="${{ secrets.STAGING_RAILWAY_TOKEN }}"
+          railway up --service="${SVC_ID}"
