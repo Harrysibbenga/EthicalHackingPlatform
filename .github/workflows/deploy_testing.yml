@@ -72,6 +72,11 @@ jobs:
           cd frontend
           npm run test
 
+      - name: Clean Up Temporary Files
+        run: |
+          rm -rf frontend/node_modules logs FIREBASE_CREDENTIALS_PATH backend/__pycache__*
+          echo "Temporary files removed successfully"
+
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
