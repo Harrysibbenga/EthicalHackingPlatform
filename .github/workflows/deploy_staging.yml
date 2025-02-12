@@ -44,11 +44,15 @@ jobs:
           curl -fsSL https://railway.app/install.sh | sh
           echo "$HOME/.railway/bin" >> $GITHUB_PATH  # Add Railway CLI to PATH
 
-      - name: Authenticate Railway CLI
+      - name: Authenticate Railway CLI (Non-Interactive)
         run: |
-          echo "${{ secrets.STAGING_RAILWAY_TOKEN }}" | railway login
+          echo "Setting RAILWAY_TOKEN..."
+          export RAILWAY_TOKEN="${{ secrets.STAGING_RAILWAY_TOKEN }}"
+          railway whoami  # ✅ Debug: Ensure Railway CLI recognizes the token
 
       - name: Deploy to Railway (Staging)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.STAGING_RAILWAY_TOKEN }}  # ✅ Ensure token is passed
         run: |
           cd backend/
-          RAILWAY_TOKEN="${{ secrets.STAGING_RAILWAY_TOKEN }}" railway up --environment staging
+          railway up --environment staging
