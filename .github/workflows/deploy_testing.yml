@@ -72,10 +72,14 @@ jobs:
           cd frontend
           npm run test
 
-      - name: Reset Testing Branch to Main
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge Main into Testing
         run: |
           git fetch origin
-          git checkout main
-          git branch -D testing || true  # Delete testing branch if it exists
-          git checkout -b testing
-          git push --force origin testing
+          git checkout testing || git checkout -b testing origin/testing
+          git merge --allow-unrelated-histories --no-ff main -m "Auto-merge from main after successful tests"
+          git push origin testing
