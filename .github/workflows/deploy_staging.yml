@@ -33,12 +33,20 @@ jobs:
     needs: merge-to-staging
 
     steps:
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          echo "$HOME/.railway/bin" >> $GITHUB_PATH  # Add Railway CLI to PATH
+
+      - name: Authenticate with Railway
+        run: |
+          railway login --token "${{ secrets.STAGING_RAILWAY_TOKEN }}"
+
       - name: Set Firebase Credentials in Railway
         run: |
-          echo "Setting Firebase credentials in Railway..."
           railway env set FIREBASE_CREDENTIALS_BASE64="${{ secrets.FIREBASE_CREDENTIALS }}"
-          
-      - name: Deploy Backend to Railway (Staging)
+
+      - name: Deploy to Railway (Staging)
         run: |
           railway up --environment staging
 
