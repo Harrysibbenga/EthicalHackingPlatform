@@ -1,9 +1,10 @@
 name: Staging Deployment
 
 on:
-  push:
-    branches:
-      - testing
+  workflow_run:
+    workflows: ["Testing Pipeline"]
+    types:
+      - completed
 
 jobs:
   merge-to-staging:
