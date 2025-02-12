@@ -40,7 +40,7 @@ jobs:
         with:
           ref: staging
 
-      - name: Debug: Verify Railway Token
+      - name: Debug Verify Railway Token
         run: |
           if [ -z "${{ secrets.STAGING_RAILWAY_TOKEN }}" ]; then
             echo "❌ RAILWAY_TOKEN is not set. Exiting."
