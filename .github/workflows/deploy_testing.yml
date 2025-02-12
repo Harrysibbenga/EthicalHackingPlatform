@@ -72,10 +72,10 @@ jobs:
           cd frontend
           npm run test
 
-      - name: Push Code to Testing Branch
-        if: success()
+      - name: Reset Testing Branch to Main
         run: |
           git fetch origin
-          git checkout testing
-          git merge --no-ff main -m "Auto-merge from main after successful tests"
-          git push origin testing
+          git checkout main
+          git branch -D testing || true  # Delete testing branch if it exists
+          git checkout -b testing
+          git push --force origin testing
