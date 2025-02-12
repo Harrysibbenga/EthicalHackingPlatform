@@ -64,12 +64,11 @@ jobs:
 
       - name: Install Frontend Dependencies
         run: |
-          cd frontend
+          cd frontend/ethical-hacking-frontend
           npm install
 
       - name: Run Frontend Tests
         run: |
-          cd frontend
           npm run test
 
       - name: Push Code to Testing Branch

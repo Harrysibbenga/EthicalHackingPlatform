@@ -1,4 +1,6 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
 
   runtimeConfig: {
@@ -13,19 +15,9 @@ export default defineNuxtConfig({
     },
   },
 
-  // 🚀 Disable SSR since Firebase is client-only
-  ssr: false,
-
-  typescript: {
-    strict: true,
-  },
-
-  app: {
-    head: {
-      title: "Nuxt Firebase Auth",
-      meta: [{ name: "description", content: "Firebase authentication in Nuxt 3" }],
-    },
-  },
-
-  compatibilityDate: "2025-02-10",
-});
+  modules: [
+    '@pinia/nuxt',
+  ],
+  
+  ssr: true,
+})
