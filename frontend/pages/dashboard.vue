@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="authStore.signOutUser">Logout</button>
+    <button @click="authStore.logout">Logout</button>
     <h1>Welcome to your dashboard</h1>
     <DashboardInfo />
   </div>

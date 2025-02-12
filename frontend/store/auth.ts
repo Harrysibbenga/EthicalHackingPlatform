@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
-  onAuthStateChanged 
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged
 } from "firebase/auth";
 import { useCookie, useRouter } from "#app";
 
@@ -16,26 +16,47 @@ export const useAuthStore = defineStore("auth", () => {
   const router = useRouter();
   const user = ref(null);
   const errorMessage = ref("");
+  const authToken = ref(localStorage.getItem("auth_token") || null); // ✅ Store token in Pinia
 
-  // ✅ Store token in cookies for SSR compatibility
-  const setAuthToken = (token: string) => {
-    const authToken = useCookie("auth_token");
+  // ✅ Store token in Pinia & localStorage (instead of `useCookie()`)
+  const setAuthToken = (token: string | null) => {
     authToken.value = token;
+
+    const cookie = useCookie("auth_token", {
+      maxAge: 60 * 60 * 24 * 7, // ✅ Set cookie for 7 days
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    if (token === null) {
+
+      document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      localStorage.removeItem("auth_token");
+      console.log("🔹 Token Removed. Local Storage Value:", authToken.value);
+
+    } else {
+
+      cookie.value = token;
+      localStorage.setItem("auth_token", token);
+      console.log("🔹 Token Set. Local Storage Value:", authToken.value);
+    }
   };
 
   // 🚀 **Register New User**
   async function register(email: string, password: string) {
     try {
+      console.log("🚀 Before Registration:", user.value); // Debug
+
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      console.log("✅ Firebase Returned User:", userCredential.user); // Debug
+
+      user.value = userCredential.user; // ✅ Updating the ref()
+
+      console.log("🔥 Updated User State:", user.value); // Debug
+
       const token = await userCredential.user.getIdToken();
-
-      user.value = userCredential.user;
       setAuthToken(token);
-
-      console.log("✅ Account created successfully!");
-      
-      // ✅ Redirect to login after successful registration
-      router.push("/login");
     } catch (error) {
       errorMessage.value = error.message || "An error occurred during registration.";
     }
@@ -79,21 +100,16 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   // 🚪 **Logout User**
-  async function signOutUser() {
+  async function logout() {
     try {
       await signOut(auth);
-      user.value = null;
+      user.value = null; // ✅ Clear user state
+      setAuthToken(null); // ✅ Ensure token is cleared
 
-      // ✅ Clear token from cookies
-      const authToken = useCookie("auth_token");
-      authToken.value = null;
-
-      console.log("✅ Signed out successfully!");
-
-      // ✅ Redirect to home page
-      router.push("/");
-    } catch (error) {
-      console.error("🚨 Error signing out:", error);
+      console.log("✅ User logged out. Token removed:", useCookie("auth_token").value); // Debugging
+      router.push("/login");
+    } catch (error: any) {
+      console.error("❌ Logout Error:", error.message);
     }
   }
 
@@ -110,5 +126,5 @@ export const useAuthStore = defineStore("auth", () => {
     });
   }
 
-  return { user, errorMessage, register, login, loginWithGoogle, signOutUser, checkAuthState };
+  return { user, errorMessage, register, login, loginWithGoogle, logout, checkAuthState, setAuthToken };
 });

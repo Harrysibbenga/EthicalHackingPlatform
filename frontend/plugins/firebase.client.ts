@@ -1,5 +1,5 @@
 import { defineNuxtPlugin } from "#app";
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -13,9 +13,10 @@ export default defineNuxtPlugin(() => {
   if (process.server) return; // 🚀 Prevent Firebase from running on the server
 
   const config = useRuntimeConfig();
-  
+
   console.log("Initializing Firebase on client...");
 
+  // ✅ Check if Firebase has already been initialized
   const firebaseConfig = {
     apiKey: config.public.FIREBASE_API_KEY,
     authDomain: config.public.FIREBASE_AUTH_DOMAIN,
@@ -26,9 +27,12 @@ export default defineNuxtPlugin(() => {
     measurementId: config.public.FIREBASE_MEASUREMENT_ID,
   };
 
-  const app = initializeApp(firebaseConfig);
+  // ✅ Get existing app or initialize Firebase
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
+
+  console.log("✅ Firebase initialized successfully!");
 
   return {
     provide: {
