@@ -40,7 +40,7 @@ jobs:
           ref: staging
 
       - name: Deploy to Railway (Staging) with Dockerfile in `backend/`
-        uses: railwayapp/railway-deploy@v2
+        uses: bervProject/railway-deploy@main
         with:
           railway_token: ${{ secrets.STAGING_RAILWAY_TOKEN }}
           service_id: ${{ secrets.STAGING_RAILWAY_SERVICE_ID }}
