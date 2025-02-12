@@ -55,5 +55,4 @@ jobs:
           SVC_ID: ${{ secrets.STAGING_RAILWAY_SERVICE_ID }}
         run: |
           cd backend/
-          export RAILWAY_TOKEN="${{ secrets.STAGING_RAILWAY_TOKEN }}"
           railway up --service="${SVC_ID}"
