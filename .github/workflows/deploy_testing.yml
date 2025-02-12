@@ -80,29 +80,17 @@ jobs:
   deploy-to-testing:
     name: Deploying to Testing Branch
     runs-on: ubuntu-latest
-    needs: run-tests  # ✅ Ensures this runs only after tests pass
+    needs: run-tests 
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/Harrysibbenga/EthicalHackingPlatform.git
-
-      - name: Merge Main into Testing with Conflict Resolution
+      - name: Merge Main into Testing
         run: |
           git fetch origin
           git checkout testing || git checkout -b testing origin/testing
-          git merge --no-ff main -m "Auto-merge from main after successful tests" || true
-          
-          # Resolve conflicts by always keeping 'main' version
-          git checkout --theirs .
-          git add .
-          git commit -m "Resolved merge conflicts by keeping main's version" || true
-          
+          git merge --no-ff main -m "Auto-merge from main after successful tests"
           git push origin testing
