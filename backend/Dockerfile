@@ -1,4 +1,4 @@
-# Use the official Python image
+# Use official Python image
 FROM python:3.12
 
 # Set working directory
@@ -7,17 +7,34 @@ WORKDIR /app
 # Copy project files
 COPY . .
 
-# Create logs directory
-RUN mkdir -p /app/logs
-
-# Set up environment variable (optional)
-ENV LOGS_DIR=/app/logs
-
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port (important for Railway)
+# Set environment variables from Railway
+ARG DATABASE_URL
+ARG DISCORD_WEBHOOK_URL
+ARG EMAIL_PASSWORD
+ARG EMAIL_RECEIVER
+ARG EMAIL_SENDER
+ARG ENV
+ARG FIREBASE_CREDENTIALS_BASE64
+ARG SMTP_PORT
+ARG SMTP_SERVER
+ARG VALID_API_KEYS
+
+ENV DATABASE_URL=${DATABASE_URL}
+ENV DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+ENV EMAIL_PASSWORD=${EMAIL_PASSWORD}
+ENV EMAIL_RECEIVER=${EMAIL_RECEIVER}
+ENV EMAIL_SENDER=${EMAIL_SENDER}
+ENV ENV=${ENV}
+ENV FIREBASE_CREDENTIALS_BASE64=${FIREBASE_CREDENTIALS_BASE64}
+ENV SMTP_PORT=${SMTP_PORT}
+ENV SMTP_SERVER=${SMTP_SERVER}
+ENV VALID_API_KEYS=${VALID_API_KEYS}
+
+# Expose the port for FastAPI
 EXPOSE 8000
 
-# Start FastAPI with Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the application using Uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
