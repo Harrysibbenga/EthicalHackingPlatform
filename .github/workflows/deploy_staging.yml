@@ -31,7 +31,6 @@ jobs:
   deploy-to-staging:
     name: Deploy to Staging
     runs-on: ubuntu-latest
-    container: ghcr.io/railwayapp/cli:latest
     needs: merge-to-staging
 
     steps:
@@ -40,16 +39,10 @@ jobs:
         with:
           ref: staging
 
-      - name: Verify Railway Token
-        run: |
-          if [ -z "${{ secrets.STAGING_RAILWAY_TOKEN }}" ]; then
-            echo "❌ RAILWAY_TOKEN is not set. Exiting."
-            exit 1
-          else
-            echo "✅ RAILWAY_TOKEN is set correctly."
-          fi
-
-      - name: Deploy to Railway (Staging)
-        run: |
-          cd backend/
-          railway up --service="${{ secrets.STAGING_RAILWAY_SERVICE_ID }}"
+      - name: Deploy to Railway (Staging) with Dockerfile in `backend/`
+        uses: railwayapp/railway-deploy@v2
+        with:
+          railway_token: ${{ secrets.STAGING_RAILWAY_TOKEN }}
+          service_id: ${{ secrets.STAGING_RAILWAY_SERVICE_ID }}
+          environment: staging
+          path: backend/
