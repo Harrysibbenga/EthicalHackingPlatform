@@ -1,4 +1,4 @@
-name: Staging Deployment
+name: Staging Deployment (Auto Railway Deployment on completion)
 
 on:
   workflow_run:
@@ -27,22 +27,3 @@ jobs:
           git checkout staging || git checkout -b staging origin/staging
           git merge --no-ff origin/testing -m "Auto-merge from testing after successful tests"
           git push origin staging
-
-  deploy-to-staging:
-    name: Deploy to Staging
-    runs-on: ubuntu-latest
-    needs: merge-to-staging
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          ref: staging
-
-      - name: Deploy to Railway (Staging) with Dockerfile in `backend/`
-        uses: bervProject/railway-deploy@main
-        with:
-          railway_token: ${{ secrets.STAGING_RAILWAY_TOKEN }}
-          service: ${{ secrets.STAGING_RAILWAY_SERVICE_ID }}
-          environment: staging
-          path: backend/
