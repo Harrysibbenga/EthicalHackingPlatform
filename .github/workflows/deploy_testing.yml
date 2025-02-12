@@ -12,8 +12,8 @@ jobs:
 
     env:
       LOGS_DIR: logs
-      FIREBASE_CREDENTIALS_PATH: "/home/runner/work/EthicalHackingPlatform/EthicalHackingPlatform/firebase.json"
       VALID_API_KEYS: ${{ secrets.VALID_API_KEYS }}
+      FIREBASE_CREDENTIALS_BASE64: ${{ secrets.FIREBASE_CREDENTIALS }}
 
       # Email Credentials
       SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
@@ -28,18 +28,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
-      - name: Decode and Create Firebase Credentials File
-        run: |
-          echo "${{ secrets.FIREBASE_CREDENTIALS }}" | base64 --decode > $FIREBASE_CREDENTIALS_PATH
-
-      - name: Verify Firebase Credentials File Exists
-        run: |
-          if [ -f "$FIREBASE_CREDENTIALS_PATH" ]; then
-            echo "✅ Firebase credentials file exists at: $FIREBASE_CREDENTIALS_PATH"
-          else
-            echo "❌ Firebase credentials file NOT found!" && exit 1
-          fi
 
       - name: Set up Python
         uses: actions/setup-python@v3
@@ -74,7 +62,7 @@ jobs:
 
       - name: Clean Up Temporary Files
         run: |
-          rm -rf frontend/node_modules logs "$FIREBASE_CREDENTIALS_PATH" backend/__pycache__*
+          rm -rf frontend/node_modules logs backend/__pycache__*
           echo "Temporary files removed successfully"
 
   deploy-to-testing:
