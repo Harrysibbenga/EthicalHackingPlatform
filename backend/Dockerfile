@@ -7,9 +7,6 @@ WORKDIR /app
 # Copy project files
 COPY . .
 
-# Copy firebase.json separately
-COPY ./firebase.json /app/firebase.json
-
 # Create logs directory
 RUN mkdir -p /app/logs
 
