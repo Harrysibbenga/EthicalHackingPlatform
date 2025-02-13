@@ -54,7 +54,4 @@ CMD echo "✅ Loaded Environment Variables:" \
     && echo "DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}" \
     && echo "VALID_API_KEYS: ${VALID_API_KEYS}" \
     && echo "DATABASE_URL: ${DATABASE_URL}" \
-    && uvicorn app.main:app --host 0.0.0.0 --port 8000
-
-# # Run the application using Uvicorn
-# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+    && uvicorn main:app --host 0.0.0.0 --port 8000
