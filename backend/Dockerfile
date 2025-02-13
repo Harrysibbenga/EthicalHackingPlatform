@@ -1,19 +1,22 @@
 # Use official Python image
 FROM python:3.12
 
-# Set working directory
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy project files
-COPY . .
+# Copy only requirements.txt first (for efficient Docker caching)
+COPY requirements.txt .
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the rest of the application files
+COPY . .
+
 # Create logs directory
 RUN mkdir -p /app/logs
 
-# Set up environment variable (optional)
+# Set up environment variable
 ENV LOGS_DIR=/app/logs
 
 # Set environment variables from Railway
@@ -22,7 +25,6 @@ ARG DISCORD_WEBHOOK_URL
 ARG EMAIL_PASSWORD
 ARG EMAIL_RECEIVER
 ARG EMAIL_SENDER
-ARG ENV
 ARG FIREBASE_CREDENTIALS_BASE64
 ARG SMTP_PORT
 ARG SMTP_SERVER
@@ -33,7 +35,6 @@ ENV DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
 ENV EMAIL_PASSWORD=${EMAIL_PASSWORD}
 ENV EMAIL_RECEIVER=${EMAIL_RECEIVER}
 ENV EMAIL_SENDER=${EMAIL_SENDER}
-ENV ENV=${ENV}
 ENV FIREBASE_CREDENTIALS_BASE64=${FIREBASE_CREDENTIALS_BASE64}
 ENV SMTP_PORT=${SMTP_PORT}
 ENV SMTP_SERVER=${SMTP_SERVER}
