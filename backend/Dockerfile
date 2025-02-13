@@ -40,8 +40,12 @@ ENV DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
 ENV VALID_API_KEYS=${VALID_API_KEYS}
 ENV DATABASE_URL=${DATABASE_URL}
 
-# Print variables during the build process
-RUN echo "SMTP_PORT: ${SMTP_PORT}" \
+# Expose the port for FastAPI
+EXPOSE 8000
+
+# ✅ Debugging: Print environment variables at runtime
+CMD echo "✅ Loaded Environment Variables:" \
+    && echo "SMTP_PORT: ${SMTP_PORT}" \
     && echo "SMTP_SERVER: ${SMTP_SERVER}" \
     && echo "EMAIL_PASSWORD: ${EMAIL_PASSWORD}" \
     && echo "EMAIL_RECEIVER: ${EMAIL_RECEIVER}" \
@@ -49,11 +53,8 @@ RUN echo "SMTP_PORT: ${SMTP_PORT}" \
     && echo "FIREBASE_CREDENTIALS_BASE64: ${FIREBASE_CREDENTIALS_BASE64}" \
     && echo "DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}" \
     && echo "VALID_API_KEYS: ${VALID_API_KEYS}" \
-    && echo "DATABASE_URL: ${DATABASE_URL}"
+    && echo "DATABASE_URL: ${DATABASE_URL}" \
+    && uvicorn app.main:app --host 0.0.0.0 --port 8000
 
-
-# Expose the port for FastAPI
-EXPOSE 8000
-
-# Run the application using Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# # Run the application using Uvicorn
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
