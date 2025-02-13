@@ -14,6 +14,15 @@ EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER")
 
 DISCORD_WEBHOOK_URL = os.getenv("API_LOGS_DISCORD_WEBHOOK")
 
+try:
+    smtp_port_env = os.getenv("SMTP_PORT", "587").strip()  # Remove leading/trailing spaces
+    if not smtp_port_env.isdigit():  # Ensure it's a valid number
+        raise ValueError("Invalid SMTP_PORT value")
+    SMTP_PORT = int(smtp_port_env)
+except ValueError:
+    print("⚠️ Warning: Invalid SMTP_PORT value. Using default: 587")
+    SMTP_PORT = 587  # Default fallback
+
 def send_alert_email(subject, message):
     msg = MIMEText(message)
     msg["Subject"] = subject
